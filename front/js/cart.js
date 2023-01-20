@@ -220,5 +220,3 @@ function deleteItemInCart(_element) {
 
 
 
-
-GetObjectsFromLocalStorage();
