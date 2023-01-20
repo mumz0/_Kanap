@@ -23,12 +23,16 @@ function getProductById(id) {
 }
 
 
-// Get items from localStorage on JSON format
+/**
+ * Get cart from localstorage and create it if doesn't exist
+ * @returns {CartItem[]} List of item
+ */
 function getCart() {
   let arrayString = localStorage.getItem("CartItems");
   if (arrayString != null) {
     return JSON.parse(arrayString);
   } else {
+    localStorage.setItem("CartItems", JSON.stringify([]));
     return [];
   }
 }

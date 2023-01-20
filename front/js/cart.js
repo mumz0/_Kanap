@@ -46,7 +46,11 @@ async function GetObjectsFromLocalStorage() {
 }
 
 
-// Create HTML items in cart and display datas needed
+//  
+/**
+ * Create HTML of each item in cart and add it to the DOM
+ * @param {ProductCart} cartItem Item to be added to the DOM
+ */
 function DisplayItemInCart(cartItem) {
   var article = document.createElement("article");
   article.classList.add("cart__item");
@@ -136,15 +140,10 @@ function getTotalPrice() {
 }
 
 
-// Get total price and total quantity and display them to cart
-function DisplayTotalCart() {
-  document.getElementById("totalQuantity").innerHTML = getTotalQuantity(),
-  document.getElementById("totalPrice").innerHTML = getTotalPrice();
-}
-
-
-// Get inputs list from HTML class, update item when one of the inputs has been changed.
-// Then display total quantity of items and total price in cart.
+/** 
+ * Get inputs list from HTML class, update item when one of the inputs has been changed.
+ * Then display total quantity of items and total price in cart.
+*/
 function changeQuantityEvent() {
   const inputsQuantity = document.getElementsByClassName("itemQuantity");
   for (let index = 0; index < inputsQuantity.length; index++) {
@@ -153,6 +152,12 @@ function changeQuantityEvent() {
       DisplayTotalCart(event);
     });
   }
+}
+
+// Get total price and total quantity and display them to cart
+function DisplayTotalCart() {
+  document.getElementById("totalQuantity").innerHTML = getTotalQuantity(),
+  document.getElementById("totalPrice").innerHTML = getTotalPrice();
 }
 
 
@@ -185,6 +190,15 @@ function deleteItemEvent() {
   }
 }
 
+// Change the look of the cart when empty. "Votre panier est vide" is showed instead of "votre panier"
+// and the total quantity and total price is removed
+function modifyEmptyCart() {
+  document.getElementById("cartTitle").innerHTML = "Votre panier est vide";
+  let element = document.getElementsByClassName("cart__price");
+  if (element.length > 0) {
+    element[0].remove();
+  }
+}
 
 // Get Item color and id, find and delete Item in itemsList, 
 // push the list updated to localstorage and reload page
@@ -205,14 +219,6 @@ function deleteItemInCart(_element) {
 }
 
 
-// Change the look of the cart when empty. "Votre panier est vide" is showed instead of "votre panier"
-// and the total quantity and total price is removed
-function modifyEmptyCart() {
-  document.getElementById("cartTitle").innerHTML = "Votre panier est vide";
-  let element = document.getElementsByClassName("cart__price");
-  if (element.length > 0) {
-    element[0].remove();
-  }
-}
+
 
 GetObjectsFromLocalStorage();
