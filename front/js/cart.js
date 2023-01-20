@@ -173,8 +173,6 @@ function updateItem(_input) {
       itemsList[index].quantity = _input.value;
       productObjList[index].quantity = _input.value;
       productObjList[index].totalPrice = productObjList[index].price * _input.value;
-      productObjList[index].totalPrice =
-        productObjList[index].price * _input.value;
     }
   }
   localStorage.setItem("CartItems", JSON.stringify(itemsList));
@@ -187,12 +185,6 @@ function deleteItemEvent() {
   for (let index = 0; index < elements.length; index++) {
     elements[index].addEventListener("click", (event) =>
       deleteItemInCart(elements[index], event)
-function deleteItemEvent() {
-  const element = document.getElementsByClassName("deleteItem");
-  console.log(element);
-  for (let index = 0; index < element.length; index++) {
-    element[index].addEventListener("click", (event) =>
-      deleteItemInCart(element[index], event)
     );
   }
 }
