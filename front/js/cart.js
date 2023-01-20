@@ -9,6 +9,9 @@ class ProductCart {
     this.totalPrice = _totalPrice;
   }
 }
+
+// Get cart from Local storage, create ProductCart objects and display datas on cart. 
+// Handle change quantity, delete event and modify the look when empty cart.
 let productObjList = [];
 let itemsList = [];
 async function GetObjectsFromLocalStorage() {
@@ -41,6 +44,8 @@ async function GetObjectsFromLocalStorage() {
   }
 }
 
+
+// Create HTML items in cart and display datas needed
 function DisplayItemInCart(cartItem) {
   var article = document.createElement("article");
   article.classList.add("cart__item");
@@ -109,6 +114,8 @@ function DisplayItemInCart(cartItem) {
 }
 
 
+
+// Get total quantity and return it
 function getTotalQuantity() {
   let inputsQuantity = document.getElementsByClassName("itemQuantity");
   let totalQuantity = 0;
@@ -119,6 +126,7 @@ function getTotalQuantity() {
 }
 
 
+// Get total price and return it
 function getTotalPrice() {
   cartPrice = 0;
   for (product of productObjList) {
@@ -128,12 +136,15 @@ function getTotalPrice() {
 }
 
 
+// Get total price and total quantity and display them to cart
 function DisplayTotalCart() {
   document.getElementById("totalQuantity").innerHTML = getTotalQuantity(),
   document.getElementById("totalPrice").innerHTML = getTotalPrice();
 }
 
 
+// Get inputs list from HTML class, update item when one of the inputs has been changed.
+// Then display total quantity of items and total price in cart.
 function changeQuantityEvent() {
   const inputsQuantity = document.getElementsByClassName("itemQuantity");
   for (let index = 0; index < inputsQuantity.length; index++) {
@@ -145,6 +156,8 @@ function changeQuantityEvent() {
 }
 
 
+// Get "article" HTML tag from input, if item is find in itemList, 
+// update values in itemList and productObjList
 function updateItem(_input) {
   let product = _input.closest("article");
   for (let index = 0; index < itemsList.length; index++) {
@@ -154,6 +167,7 @@ function updateItem(_input) {
     ) {
       itemsList[index].quantity = _input.value;
       productObjList[index].quantity = _input.value;
+      productObjList[index].totalPrice = productObjList[index].price * _input.value;
       productObjList[index].totalPrice =
         productObjList[index].price * _input.value;
     }
@@ -161,7 +175,13 @@ function updateItem(_input) {
   localStorage.setItem("CartItems", JSON.stringify(itemsList));
 }
 
-
+// Get elements coressponding to deletItem class in DOM and call the 
+// delete function with the right element on click
+function deleteItemEvent() {
+  const elements = document.getElementsByClassName("deleteItem");
+  for (let index = 0; index < elements.length; index++) {
+    elements[index].addEventListener("click", (event) =>
+      deleteItemInCart(elements[index], event)
 function deleteItemEvent() {
   const element = document.getElementsByClassName("deleteItem");
   console.log(element);
@@ -173,6 +193,8 @@ function deleteItemEvent() {
 }
 
 
+// Get Item color and id, find and delete Item in itemsList, 
+// push the list updated to localstorage and reload page
 function deleteItemInCart(_element) {
   console.log(_element);
   let elementId = _element.closest("article").getAttribute("data-id");
@@ -191,6 +213,8 @@ function deleteItemInCart(_element) {
 }
 
 
+// Change the look of the cart when empty. "Votre panier est vide" is showed instead of "votre panier"
+// and the total quantity and total price is removed
 function modifyEmptyCart() {
   document.getElementById("cartTitle").innerHTML = "Votre panier est vide";
   let element = document.getElementsByClassName("cart__price");

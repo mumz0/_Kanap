@@ -6,10 +6,14 @@ class CartItem {
   }
 }
 
+
+// Get ID product from URL
 function getIdFromUrl() {
   return new URL(location).searchParams.get("_id");
 }
 
+
+// Get product object by ID
 function getProductById(id) {
   if (id) {
     return fetch("http://localhost:3000/api/products/" + id);
@@ -18,6 +22,8 @@ function getProductById(id) {
   }
 }
 
+
+// Get items from localStorage on JSON format
 function getCart() {
   let arrayString = localStorage.getItem("CartItems");
   if (arrayString != null) {
@@ -27,6 +33,9 @@ function getCart() {
   }
 }
 
+
+// Get item list in localStorage, find item in list and add quantity selected if 
+// item is already in list. Else add item to list and push to localstorage in string format.
 function addItemToCart(addedItem) {
   let cart = getCart();
   let oldItem = cart.find(
