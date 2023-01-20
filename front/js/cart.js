@@ -10,7 +10,6 @@ class ProductCart {
   }
 }
 
-
 // Get cart from Local storage, create ProductCart objects and display datas on cart. 
 // Handle change quantity, delete event and modify the look when empty cart.
 let productObjList = [];
@@ -115,6 +114,7 @@ function DisplayItemInCart(cartItem) {
 }
 
 
+
 // Get total quantity and return it
 function getTotalQuantity() {
   let inputsQuantity = document.getElementsByClassName("itemQuantity");
@@ -168,11 +168,12 @@ function updateItem(_input) {
       itemsList[index].quantity = _input.value;
       productObjList[index].quantity = _input.value;
       productObjList[index].totalPrice = productObjList[index].price * _input.value;
+      productObjList[index].totalPrice =
+        productObjList[index].price * _input.value;
     }
   }
   localStorage.setItem("CartItems", JSON.stringify(itemsList));
 }
-
 
 // Get elements coressponding to deletItem class in DOM and call the 
 // delete function with the right element on click
@@ -181,6 +182,12 @@ function deleteItemEvent() {
   for (let index = 0; index < elements.length; index++) {
     elements[index].addEventListener("click", (event) =>
       deleteItemInCart(elements[index], event)
+function deleteItemEvent() {
+  const element = document.getElementsByClassName("deleteItem");
+  console.log(element);
+  for (let index = 0; index < element.length; index++) {
+    element[index].addEventListener("click", (event) =>
+      deleteItemInCart(element[index], event)
     );
   }
 }
@@ -192,6 +199,7 @@ function deleteItemInCart(_element) {
   console.log(_element);
   let elementId = _element.closest("article").getAttribute("data-id");
   let elementColor = _element.closest("article").getAttribute("data-color");
+  console.log(elementId, elementColor);
   for (let index = 0; index < itemsList.length; index++) {
     if (
       itemsList[index].id === elementId &&
