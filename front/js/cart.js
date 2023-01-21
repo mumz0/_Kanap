@@ -10,7 +10,7 @@ class ProductCart {
   }
 }
 
-// Get cart from Local storage, create ProductCart objects and display datas on cart. 
+// Get cart from Local storage, create ProductCart objects and display datas on cart.
 // Handle change quantity, delete event and modify the look when empty cart.
 let productObjList = [];
 let itemsList = [];
@@ -40,12 +40,13 @@ async function GetObjectsFromLocalStorage() {
     changeQuantityEvent();
     deleteItemEvent();
   } else {
-    modifyEmptyCart()
+    modifyEmptyCart();
   }
+  changeFormEvent()
+  OrderEvent()
 }
 
-
-//  
+//
 /**
  * Create HTML of each item in cart and add it to the DOM
  * @param {ProductCart} cartItem Item to be added to the DOM
@@ -117,8 +118,6 @@ function DisplayItemInCart(cartItem) {
   document.getElementById("cart__items").appendChild(article);
 }
 
-
-
 // Get total quantity and return it
 function getTotalQuantity() {
   let inputsQuantity = document.getElementsByClassName("itemQuantity");
@@ -129,7 +128,6 @@ function getTotalQuantity() {
   return totalQuantity;
 }
 
-
 // Get total price and return it
 function getTotalPrice() {
   cartPrice = 0;
@@ -139,52 +137,51 @@ function getTotalPrice() {
   return cartPrice;
 }
 
-
-/** 
+/**
  * Get inputs list from HTML class, update item when one of the inputs has been changed.
  * Then display total quantity of items and total price in cart.
-*/
+ */
 function changeQuantityEvent() {
   const inputsQuantity = document.getElementsByClassName("itemQuantity");
   for (let index = 0; index < inputsQuantity.length; index++) {
     inputsQuantity[index].addEventListener("change", (event) => {
-      updateItem(inputsQuantity[index], event),
-      DisplayTotalCart(event);
+      updateItem(event, inputsQuantity[index].value), DisplayTotalCart(event);
     });
   }
 }
 
 // Get total price and total quantity and display them to cart
 function DisplayTotalCart() {
-  document.getElementById("totalQuantity").innerHTML = getTotalQuantity(),
-  document.getElementById("totalPrice").innerHTML = getTotalPrice();
+  (document.getElementById("totalQuantity").innerHTML = getTotalQuantity()),
+    (document.getElementById("totalPrice").innerHTML = getTotalPrice());
 }
 
-
-// Get "article" HTML tag from input, if item is find in itemList, 
+// Get "article" HTML tag from input, if item is find in itemList,
 // update values in itemList and productObjList
-function updateItem(_input) {
-  let product = _input.closest("article");
+function updateItem(event, inputValue) {
+  let product = event.target.closest("article");
+  console.log(product);
   for (let index = 0; index < itemsList.length; index++) {
     if (
       product.dataset.id === itemsList[index].id &&
       product.dataset.color === itemsList[index].color
     ) {
-      itemsList[index].quantity = _input.value;
-      productObjList[index].quantity = _input.value;
-      productObjList[index].totalPrice = productObjList[index].price * _input.value;
+      itemsList[index].quantity = Number(inputValue);
+      productObjList[index].quantity = Number(inputValue);
+      productObjList[index].totalPrice =
+        productObjList[index].price * inputValue;
     }
   }
   localStorage.setItem("CartItems", JSON.stringify(itemsList));
 }
 
-// Get elements coressponding to deletItem class in DOM and call the 
+// Get elements coressponding to deletItem class in DOM and call the
 // delete function with the right element on click
 function deleteItemEvent() {
   const elements = document.getElementsByClassName("deleteItem");
   for (let index = 0; index < elements.length; index++) {
     elements[index].addEventListener("click", (event) =>
-      deleteItemInCart(elements[index], event)
+      deleteItemInCart(event)
     );
   }
 }
@@ -199,13 +196,12 @@ function modifyEmptyCart() {
   }
 }
 
-// Get Item color and id, find and delete Item in itemsList, 
+// Get Item color and id, find and delete Item in itemsList,
 // push the list updated to localstorage and reload page
-function deleteItemInCart(_element) {
-  console.log(_element);
-  let elementId = _element.closest("article").getAttribute("data-id");
-  let elementColor = _element.closest("article").getAttribute("data-color");
-  console.log(elementId, elementColor);
+function deleteItemInCart(event) {
+  let itemToDelete = event.target.closest("article");
+  let elementId = event.target.closest("article").getAttribute("data-id");
+  let elementColor = event.target.closest("article").getAttribute("data-color");
   for (let index = 0; index < itemsList.length; index++) {
     if (
       itemsList[index].id === elementId &&
@@ -215,8 +211,90 @@ function deleteItemInCart(_element) {
     }
   }
   localStorage.setItem("CartItems", JSON.stringify(itemsList));
-  location.reload();
+  itemToDelete.remove();
+  if (itemsList.length == 0) {
+    modifyEmptyCart();
+  }
+}
+
+function changeFormEvent() {
+  let formElements = document.getElementsByClassName("cart__order__form__question");
+  let changeEvent = (event) => {
+    getData(event)
+}
+Array.from(formElements).forEach((elem) => {
+  elem.addEventListener('change', changeEvent)
+});
+}
+
+function OrderEvent() {
+  let submitElement = document.getElementById(
+    "order"
+  );
+  submitElement.addEventListener("click", (event) => {
+    event.preventDefault()
+    order()
+    
+  });
+}
+
+function order() {
+  let formElements = document.getElementsByClassName(
+    "cart__order__form__question"
+  );
+  if (itemsList.length == 0) {
+    alert("Votre panier est vide");
+  } else {
+    for (let index = 0; index < formElements.length; index++) {
+      inputValue = formElements[index].querySelector("input").value;
+      attributeId = formElements[index].querySelector("input").getAttribute("id");
+      if (checkConformity(inputValue, attributeId)) {
+        continue;
+      } else {
+        alert("Veuillez vérifier le formulaire");
+        return
+      }
+    }
+  }
+  console.log("postrequest function");
+}
+
+function getData(event) {
+  let _inputValue = event.target.value;
+  let _attributeId = event.target.id;
+  checkConformity(_inputValue, _attributeId)
+}
+
+function checkConformity(inputValue, attributeId) {
+  console.log(inputValue)
+  console.log(attributeId)
+  if (inputValue != "") {
+    if (attributeId == "email") {
+      const emailRegexp = new RegExp("^[a-zA-Z0-9.]+[@][a-z]+[.][[a-z]{2,10}$");
+      return inputTest(emailRegexp, inputValue, attributeId);
+    } else if (attributeId == "firstName") {
+      const firstNameRegexp = new RegExp("^[a-zéèçàA-Z-' ]{2,20}$");
+      return inputTest(firstNameRegexp, inputValue, attributeId);
+    } else {
+      const textRegexp = new RegExp("^[a-zéèçàA-Z0-9.-_' ]{2,50}$");
+      return inputTest(textRegexp, inputValue, attributeId);
+    }
+  } 
+}
+
+
+function inputTest(regexp, _inputValue, __attributeId) {
+  if (regexp.test(_inputValue)) {
+    // console.log(regexp.test(_inputValue))
+    document.getElementById(__attributeId + "ErrorMsg").innerHTML = "";
+    return true;
+  } else {
+    console.log(regexp.test(_inputValue))
+    document.getElementById(__attributeId + "ErrorMsg").innerHTML = "Veuillez entrer un texte valide";
+    return false;
+  }
 }
 
 
 
+GetObjectsFromLocalStorage();
