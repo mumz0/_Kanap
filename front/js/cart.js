@@ -227,38 +227,6 @@ Array.from(formElements).forEach((elem) => {
 });
 }
 
-function OrderEvent() {
-  let submitElement = document.getElementById(
-    "order"
-  );
-  submitElement.addEventListener("click", (event) => {
-    event.preventDefault()
-    order()
-    
-  });
-}
-
-function order() {
-  let formElements = document.getElementsByClassName(
-    "cart__order__form__question"
-  );
-  if (itemsList.length == 0) {
-    alert("Votre panier est vide");
-  } else {
-    for (let index = 0; index < formElements.length; index++) {
-      inputValue = formElements[index].querySelector("input").value;
-      attributeId = formElements[index].querySelector("input").getAttribute("id");
-      if (checkConformity(inputValue, attributeId)) {
-        continue;
-      } else {
-        alert("Veuillez vérifier le formulaire");
-        return
-      }
-    }
-  }
-  console.log("postrequest function");
-}
-
 function getData(event) {
   let _inputValue = event.target.value;
   let _attributeId = event.target.id;
@@ -295,6 +263,83 @@ function inputTest(regexp, _inputValue, __attributeId) {
   }
 }
 
+function OrderEvent() {
+  let submitElement = document.getElementById("order");
+  submitElement.addEventListener("click", (event) => {
+    event.preventDefault();
+    order();
+  });
+}
+
+function order() {
+  let formElements = document.getElementsByClassName(
+    "cart__order__form__question"
+  );
+  if (itemsList.length == 0) {
+    alert("Votre panier est vide");
+    return;
+  } else {
+    for (let index = 0; index < formElements.length; index++) {
+      inputValue = formElements[index].querySelector("input").value;
+      attributeId = formElements[index]
+        .querySelector("input")
+        .getAttribute("id");
+      if (checkConformity(inputValue, attributeId)) {
+        continue;
+      } else {
+        alert("Veuillez vérifier le formulaire");
+        return;
+      }
+    }
+  }
+  getDataToPost();
+}
+  
+function getDataToPost() {
+  let orderIdList = [];
+  for (let index = 0; index < itemsList.length; index++) {
+    orderIdList.push(itemsList[index].id);
+  }
+  let orderForm = {
+    contact: {
+      firstName: document.getElementById("firstName").value,
+      lastName: document.getElementById("lastName").value,
+      address: document.getElementById("address").value,
+      city: document.getElementById("city").value,
+      email: document.getElementById("email").value,
+    },
+    products: orderIdList,
+  };
+  console.log(orderForm);
+
+  orderInformation = JSON.stringify(orderForm);
+  console.log(orderInformation);
+  postOrder(orderInformation);
+}
+
+
+  function postOrder(orderInformation) {
+   fetch("http://localhost:3000/api/products/order/", {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json",
+     },
+     body: orderInformation,
+   })
+     .then((response) => {
+       if (response.status == 201) {
+         console.log(response.status);
+         console.log(response.json());
+       } else {
+         alert("La validation a échoué. Veuillez réessayer");
+         console.error("Echec de la requête POST, status : " + response.status);
+       }
+     })
+     .then((data) => {
+      window.location.href = "./confirmation.html?id=" + data.orderId;
+     });
+     
+ }
 
 
 GetObjectsFromLocalStorage();

@@ -8,8 +8,8 @@ class CartItem {
 
 
 // Get ID product from URL
-function getIdFromUrl() {
-  return new URL(location).searchParams.get("_id");
+function getIdFromUrl(param) {
+  return new URL(location).searchParams.get(param);
 }
 
 
