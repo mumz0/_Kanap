@@ -1,7 +1,7 @@
 // Get ID from URL, then get the product object on JSON format and display datas needed
 // to product page. handle adding item to cart on click event
 function getProductDetailsAndDisplay() {
-  id = getIdFromUrl();
+  id = getIdFromUrl("_id");
   getProductById(id)
     .then((res) => res.json())
     .then((item) => {
