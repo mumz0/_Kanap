@@ -318,28 +318,27 @@ function getDataToPost() {
 }
 
 
-  function postOrder(orderInformation) {
-   fetch("http://localhost:3000/api/products/order/", {
-     method: "POST",
-     headers: {
-       "Content-Type": "application/json",
-     },
-     body: orderInformation,
-   })
-     .then((response) => {
-       if (response.status == 201) {
-         console.log(response.status);
-         console.log(response.json());
-       } else {
-         alert("La validation a échoué. Veuillez réessayer");
-         console.error("Echec de la requête POST, status : " + response.status);
-       }
-     })
-     .then((data) => {
+function postOrder(orderInformation) {
+  fetch("http://localhost:3000/api/products/order/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: orderInformation,
+  })
+    .then((response) => {
+      if (response.status == 201) {
+        console.log(response.status);
+        return response.json();
+      } else {
+        alert("La validation a échoué. Veuillez réessayer");
+        console.error("Echec de la requête POST, status : " + response.status);
+      }
+    })
+    .then((data) => {
       window.location.href = "./confirmation.html?id=" + data.orderId;
-     });
-     
- }
+    });
+}
 
 
 GetObjectsFromLocalStorage();

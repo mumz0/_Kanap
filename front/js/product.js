@@ -37,8 +37,8 @@ function addItem(item) {
   }
   if (_quantity > 100) {
     alert("Veuillez choisir une quantité comprise entre 1 et 100");
-  } 
   }
+}
 
 
 // Get Add to cart button element and call addItem function on click.
