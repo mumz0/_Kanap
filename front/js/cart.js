@@ -329,7 +329,7 @@ function getDataToPost() {
      .then((response) => {
        if (response.status == 201) {
          console.log(response.status);
-         console.log(response.json());
+         return response.json();
        } else {
          alert("La validation a échoué. Veuillez réessayer");
          console.error("Echec de la requête POST, status : " + response.status);
