@@ -1,4 +1,6 @@
-// Get all product from API on JSON format and display them to index page.
+/**
+ * Get all product from API on JSON format and display them to index page.
+ */
 fetch("http://localhost:3000/api/products")
   .then((res) => res.json())
   .then((data) => {
@@ -6,7 +8,10 @@ fetch("http://localhost:3000/api/products")
   });
 
 
-// Créate HTML and display datas needed
+/**
+ * Créate HTML and display datas needed
+ * @param {[]} cardList 
+ */
 function displayKanapList(cardList) {
   for (let card of cardList) {
     var link = document.createElement("a");
