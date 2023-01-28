@@ -1,11 +1,12 @@
 class CartItem {
-  constructor(id, color, quantity) {
-    this.id = id;
-    this.color = color;
-    this.quantity = quantity;
-  }
+    constructor(id, color, quantity) {
+        this.id = id;
+        this.color = color;
+        this.quantity = quantity;
+    }
 }
 
+const cartKey = "CartItems";
 
 /**
  * Get ID product from URL
@@ -13,7 +14,7 @@ class CartItem {
  * @returns String
  */
 function getIdFromUrl(param) {
-  return new URL(location).searchParams.get(param);
+    return new URL(location).searchParams.get(param);
 }
 
 
@@ -23,11 +24,11 @@ function getIdFromUrl(param) {
  * @returns Promise | null
  */
 function getProductById(id) {
-  if (id) {
-    return fetch("http://localhost:3000/api/products/" + id);
-  } else {
-    return null;
-  }
+    if (id) {
+        return fetch("http://localhost:3000/api/products/" + id);
+    } else {
+        return null;
+    }
 }
 
 
@@ -36,15 +37,23 @@ function getProductById(id) {
  * @returns {CartItem[]} List of item
  */
 function getCart() {
-  let arrayString = localStorage.getItem("CartItems");
-  if (arrayString != null) {
-    return JSON.parse(arrayString);
-  } else {
-    localStorage.setItem("CartItems", JSON.stringify([]));
-    return [];
-  }
+    let arrayString = localStorage.getItem(cartKey);
+    if (arrayString != null) {
+        return JSON.parse(arrayString);
+    } else {
+
+        return [];
+    }
 }
- 
+
+/**
+ * Write cart to localStorage
+ * @param {[*]} cart 
+ */
+function writeCart(cart) {
+    localStorage.setItem(cartKey, JSON.stringify(cart));
+}
+
 
 /**
  * Get item list in localStorage, find item in list and add quantity selected if 
@@ -52,16 +61,16 @@ function getCart() {
  * @param {CartItem} addedItem 
  */
 function addItemToCart(addedItem) {
-  let cart = getCart();
-  let oldItem = cart.find(
-    (item) => item.id === addedItem.id && item.color === addedItem.color
-  );
-  if (oldItem) {
-    oldItem.quantity += addedItem.quantity;
-  } else {
-    cart.push(addedItem);
-  }
-  localStorage.setItem("CartItems", JSON.stringify(cart));
+    let cart = getCart();
+    let oldItem = cart.find(
+        (item) => item.id === addedItem.id && item.color === addedItem.color
+    );
+    if (oldItem) {
+        oldItem.quantity += addedItem.quantity;
+    } else {
+        cart.push(addedItem);
+    }
+    writeCart(cart);
 }
 
 
