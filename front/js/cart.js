@@ -34,9 +34,9 @@ async function GetObjectsFromLocalStorage() {
                 });
             DisplayItemInCart(productObj);
             productObjList.push(productObj);
+            DisplayTotalCart();
         });
     }
-    DisplayTotalCart();
     changeFormEvent()
     OrderEvent()
 }
@@ -157,7 +157,7 @@ function updateItem(event) {
 /**
  * Get Item color and id, find and delete Item in itemsList,
  * push the list updated to localstorage and reload page
- * @param {click} event 
+ * @param {Event} event 
  */
 function deleteItemInCart(event) {
     let itemToDelete = event.target.closest("article");
@@ -190,7 +190,7 @@ function changeFormEvent() {
 
 /**
  * Get input value and attribut ID of form element targeted and check conformity of the input form
- * @param {change} event 
+ * @param {Event} event 
  */
 function getData(event) {
     let _inputValue = event.target.value;
