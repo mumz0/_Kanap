@@ -3,13 +3,13 @@
  * to product page. handle adding item to cart on click event
  */
 function getProductDetailsAndDisplay() {
-  id = getIdFromUrl("_id");
-  getProductById(id)
-    .then((res) => res.json())
-    .then((item) => {
-      displayKanapDetails(item);
-      addClickEvent(item);
-    });
+    id = getIdFromUrl("_id");
+    getProductById(id)
+        .then((res) => res.json())
+        .then((item) => {
+            displayKanapDetails(item);
+            addClickEvent(item);
+        });
 }
 
 /**
@@ -17,18 +17,18 @@ function getProductDetailsAndDisplay() {
  * @param {{}} itemDetails 
  */
 function displayKanapDetails(itemDetails) {
-  let imageUrl = document.querySelector(".item__img");
-  imageUrl.innerHTML = `<img src="${itemDetails.imageUrl}" alt="${itemDetails.altTxt}">`;
-  let name = document.getElementById("title");
-  name.innerHTML = itemDetails.name;
-  let price = document.getElementById("price");
-  price.innerHTML = itemDetails.price;
-  let description = document.getElementById("description");
-  description.innerHTML = itemDetails.description;
-  let color = document.getElementById("colors");
-  for (index = 0; index < itemDetails.colors.length; index++) {
-    color.innerHTML += `<option value="${itemDetails.colors[index]}">${itemDetails.colors[index]}</option>`;
-  }
+    let imageUrl = document.querySelector(".item__img");
+    imageUrl.innerHTML = `<img src="${itemDetails.imageUrl}" alt="${itemDetails.altTxt}">`;
+    let name = document.getElementById("title");
+    name.innerHTML = itemDetails.name;
+    let price = document.getElementById("price");
+    price.innerHTML = itemDetails.price;
+    let description = document.getElementById("description");
+    description.innerHTML = itemDetails.description;
+    let color = document.getElementById("colors");
+    for (index = 0; index < itemDetails.colors.length; index++) {
+        color.innerHTML += `<option value="${itemDetails.colors[index]}">${itemDetails.colors[index]}</option>`;
+    }
 }
 
 
@@ -38,18 +38,18 @@ function displayKanapDetails(itemDetails) {
  * @param {{}} item 
  */
 function addItem(item) {
-  const _quantity = Number(document.getElementById("quantity").value);
-  const _color = document.getElementById("colors").value;
-  if (_color != "") {
-    let _item = new CartItem(item._id, _color, _quantity);
-    addItemToCart(_item);
-  } else {
-    alert("Veuillez choisir une couleur")
-  }
-  if (_quantity > 100) {
-    alert("Veuillez choisir une quantité comprise entre 1 et 100");
-  } 
-  }
+    const _quantity = Number(document.getElementById("quantity").value);
+    const _color = document.getElementById("colors").value;
+    if (_color != "") {
+        let _item = new CartItem(item._id, _color, _quantity);
+        addItemToCart(_item);
+    } else {
+        alert("Veuillez choisir une couleur")
+    }
+    if (_quantity > 100) {
+        alert("Veuillez choisir une quantité comprise entre 1 et 100");
+    }
+}
 
 
 /**
@@ -57,8 +57,8 @@ function addItem(item) {
  * @param {{}} item 
  */
 function addClickEvent(item) {
-  const CartButton = document.getElementById("addToCart");
-  CartButton.addEventListener("click", (event) => addItem(item, event));
+    const CartButton = document.getElementById("addToCart");
+    CartButton.addEventListener("click", (event) => addItem(item, event));
 }
 
 getProductDetailsAndDisplay();
