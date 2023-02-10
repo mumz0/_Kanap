@@ -23,9 +23,11 @@ function getIdFromUrl(param) {
 * @param {String} id 
 * @returns Promise | null
 */
-function getProductById(id) {
+async function getProductById(id) {
   if (id) {
-      return fetch("http://localhost:3000/api/products/" + id);
+      const response = await fetch("http://localhost:3000/api/products/" + id);
+      return await response.json();
+
   } else {
       return null;
   }
@@ -45,6 +47,7 @@ function getCart() {
       return [];
   }
 }
+
 
 /**
 * Write cart to localStorage

@@ -1,12 +1,13 @@
 /**
  * Get all product from API on JSON format and display them to index page.
  */
-fetch("http://localhost:3000/api/products")
-  .then((res) => res.json())
-  .then((data) => {
-    displayKanapList(data);
-  });
-
+function indexProcess() {
+  fetch("http://localhost:3000/api/products")
+    .then((res) => res.json())
+    .then((data) => {
+      displayKanapList(data);
+    });
+} 
 
 /**
  * Créate HTML and display datas needed
@@ -38,3 +39,5 @@ function displayKanapList(cardList) {
     document.getElementById("items").appendChild(link);
   }
 }
+
+indexProcess()
