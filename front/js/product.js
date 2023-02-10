@@ -2,15 +2,18 @@
  * Get ID from URL, then get the product object on JSON format and display datas needed
  * to product page. handle adding item to cart on click event
  */
-function getProductDetailsAndDisplay() {
+function ProductProcess() {
   id = getIdFromUrl("_id");
-  getProductById(id)
-      .then((res) => res.json())
-      .then((item) => {
-          displayKanapDetails(item);
-          addClickEvent(item);
-      });
-}
+  getProductById(id).then((item) => {
+    if (item._id == id) {
+      displayKanapDetails(item);
+      addClickEvent(item);
+    } else {
+      window.location.href = "./index.html";
+    }
+  });
+} 
+
 
 /**
 * Display product details in DOM
@@ -61,4 +64,4 @@ function addClickEvent(item) {
   CartButton.addEventListener("click", (event) => addItem(item, event));
 }
 
-getProductDetailsAndDisplay();
+ProductProcess();
