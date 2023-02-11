@@ -37,23 +37,24 @@ function displayKanapDetails(itemDetails) {
 
 /**
 * Get quantity and color selected, create Cartitem object and add it to cart only if
-* a color and a quantity not over 100 has been selected. Else an alert has been send to user. 
+* a color and a quantity not between 0 to 100 has been selected. Else an alert has been send to user. 
 * @param {{}} item 
 */
 function addItem(item) {
   const _quantity = Number(document.getElementById("quantity").value);
   const _color = document.getElementById("colors").value;
-  if (_color != "") {
+  if (_color != "" && _quantity >= 1 && _quantity <= 100) {
       let _item = new CartItem(item._id, _color, _quantity);
       addItemToCart(_item);
   } else {
+    if (_color == "") {
       alert("Veuillez choisir une couleur")
   }
-  if (_quantity > 100) {
+  else if (_quantity > 100 || _quantity < 0) {
       alert("Veuillez choisir une quantité comprise entre 1 et 100");
   }
 }
-
+} 
 
 /**
 * Get Add to cart button element and call addItem function on click.
